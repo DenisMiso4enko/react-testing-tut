@@ -157,10 +157,10 @@ The coverage report will be available in the `coverage/` directory.
 
 ```jsx
 // src/components/Greeting.jsx
-import React from "react";
+import React from 'react';
 
 function Greeting({ name }) {
-  return <h1>Hello, {name || "World"}!</h1>;
+  return <h1>Hello, {name || 'World'}!</h1>;
 }
 
 export default Greeting;
@@ -170,23 +170,23 @@ export default Greeting;
 
 ```jsx
 // src/components/Greeting.test.jsx
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import Greeting from "./Greeting";
-import { describe, it, expect } from "vitest";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Greeting from './Greeting';
+import { describe, it, expect } from 'vitest';
 
-describe("Greeting", () => {
-  it("renders a default greeting", () => {
+describe('Greeting', () => {
+  it('renders a default greeting', () => {
     render(<Greeting />);
     expect(
-      screen.getByRole("heading", { name: /hello, world!/i })
+      screen.getByRole('heading', { name: /hello, world!/i }),
     ).toBeInTheDocument();
   });
 
-  it("renders greeting with a name", () => {
+  it('renders greeting with a name', () => {
     render(<Greeting name="Alice" />);
     expect(
-      screen.getByRole("heading", { name: /hello, alice!/i })
+      screen.getByRole('heading', { name: /hello, alice!/i }),
     ).toBeInTheDocument();
   });
 });
@@ -198,7 +198,7 @@ describe("Greeting", () => {
 
 ```jsx
 // src/components/Counter.jsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -217,25 +217,25 @@ export default Counter;
 
 ```jsx
 // src/components/Counter.test.jsx
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import Counter from "./Counter";
-import { describe, it, expect } from "vitest";
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import Counter from './Counter';
+import { describe, it, expect } from 'vitest';
 
-describe("Counter", () => {
-  it("increments counter on button click", () => {
+describe('Counter', () => {
+  it('increments counter on button click', () => {
     render(<Counter />);
 
-    const button = screen.getByRole("button", { name: /increment/i });
-    const value = screen.getByTestId("count-value");
+    const button = screen.getByRole('button', { name: /increment/i });
+    const value = screen.getByTestId('count-value');
 
-    expect(value.textContent).toEqual("0");
-
-    fireEvent.click(button);
-    expect(value.textContent).toEqual("1");
+    expect(value.textContent).toEqual('0');
 
     fireEvent.click(button);
-    expect(value.textContent).toEqual("2");
+    expect(value.textContent).toEqual('1');
+
+    fireEvent.click(button);
+    expect(value.textContent).toEqual('2');
   });
 });
 ```
@@ -246,7 +246,7 @@ describe("Counter", () => {
 
 ```jsx
 // src/components/UserProfile.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
@@ -273,12 +273,12 @@ export default UserProfile;
 
 ```jsx
 // src/components/UserProfile.test.jsx
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import UserProfile from "./UserProfile";
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import UserProfile from './UserProfile';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-describe("UserProfile", () => {
+describe('UserProfile', () => {
   beforeEach(() => {
     global.fetch = vi.fn();
   });
@@ -287,8 +287,8 @@ describe("UserProfile", () => {
     vi.resetAllMocks();
   });
 
-  it("fetches and displays user data", async () => {
-    const mockUser = { name: "John Doe", email: "john@example.com" };
+  it('fetches and displays user data', async () => {
+    const mockUser = { name: 'John Doe', email: 'john@example.com' };
     global.fetch.mockResolvedValueOnce({
       json: async () => mockUser,
     });
@@ -301,7 +301,7 @@ describe("UserProfile", () => {
     // Wait for the fetch to resolve and component to update
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: /john doe/i })
+        screen.getByRole('heading', { name: /john doe/i }),
       ).toBeInTheDocument();
       expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
     });
@@ -315,7 +315,7 @@ describe("UserProfile", () => {
 
 ```jsx
 // src/hooks/useCounter.js
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useCounter(initialValue = 0) {
   const [count, setCount] = useState(initialValue);
@@ -336,12 +336,12 @@ export function useCounter(initialValue = 0) {
 
 ```jsx
 // src/hooks/useCounter.test.js
-import { renderHook, act } from "@testing-library/react-hooks";
-import { useCounter } from "./useCounter";
-import { describe, it, expect } from "vitest";
+import { renderHook, act } from '@testing-library/react-hooks';
+import { useCounter } from './useCounter';
+import { describe, it, expect } from 'vitest';
 
-describe("useCounter", () => {
-  it("increments and decrements", () => {
+describe('useCounter', () => {
+  it('increments and decrements', () => {
     const { result } = renderHook(() => useCounter(10));
 
     expect(result.current.count).toBe(10);

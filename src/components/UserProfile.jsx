@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
+// eslint-disable-next-line react/prop-types
 function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
 
@@ -10,8 +11,8 @@ function UserProfile({ userId }) {
   }, [userId]);
 
   if (!user) return <p>Loading...</p>;
-  console.log({user});
-  
+  console.log({ user });
+
   return (
     <div>
       <h2>{user.name}</h2>
