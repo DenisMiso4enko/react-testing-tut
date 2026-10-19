@@ -55,7 +55,12 @@ jobs:
         # Для этого в package.json добавьте скрипт: "test:run": "vitest run"
         run: npm run test:run
 
-      # Шаг 6: проверка, что проект собирается
+        # Шаг 6: запуск форматирования
+      - name: Format
+        # "prettier --write ." форматирует код
+        run: npm run format:check
+
+      # Шаг 7: проверка, что проект собирается
       - name: Build
         # Запускает "vite build" из вашего package.json
         run: npm run build
