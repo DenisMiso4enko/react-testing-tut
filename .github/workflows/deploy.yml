@@ -1,0 +1,62 @@
+# Имя workflow в списке на вкладке Actions
+name: Deploy
+
+# Когда запускать
+on:
+  # При каждом push в ветку master (то есть после слияния PR)
+  push:
+    branches: [master]
+
+# Права для автоматического токена GitHub. Без них деплой не получит доступ к Pages
+permissions:
+  # Разрешаем читать содержимое репозитория
+  contents: read
+  # Разрешаем публиковать на GitHub Pages
+  pages: write
+  # Разрешаем подтвердить личность workflow при публикации
+  id-token: write
+
+jobs:
+  # Название задачи (придумываем сами)
+  deploy:
+    # Запускаем на виртуальной машине с Ubuntu
+    runs-on: ubuntu-latest
+
+    # Окружение, в которое мы деплоим. GitHub показывает его в интерфейсе
+    environment:
+      # Стандартное имя окружения для GitHub Pages
+      name: github-pages
+      # Ссылка на опубликованный сайт; она появится в результате запуска
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Скачиваем код репозитория на виртуальную машину
+      - uses: actions/checkout@v4
+
+      # Устанавливаем Node.js
+      - uses: actions/setup-node@v4
+        with:
+          # Версия Node
+          node-version: 24
+          # Кэшируем npm-пакеты для ускорения
+          cache: npm
+
+      # Устанавливаем зависимости строго по package-lock.json
+      - run: npm ci
+
+      # Прогоняем тесты ещё раз: сломанный код не должен попасть на сайт
+      - run: npm run test:run
+
+      # Собираем проект. Результат появится в папке dist
+      - run: npm run build
+
+      # Упаковываем папку dist в «артефакт», который понимает GitHub Pages
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # Какую папку упаковать
+          path: dist
+
+      # Публикуем артефакт на GitHub Pages.
+      # id нужен, чтобы выше можно было сослаться на результат этого шага
+      - id: deployment
+        uses: actions/deploy-pages@v4
